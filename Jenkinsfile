@@ -11,7 +11,7 @@ pipeline {
         }
     }
 
-    post {
+    post { 
         success {
             emailext subject: "Jenkins Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                      body: "Good news! The build was successful.\nCheck details at: ${env.BUILD_URL}",
