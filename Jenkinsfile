@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        RECIPIENTS = 'team@example.com' // Change this to your email recipients
+        RECIPIENTS = 'elvdevops@gmail.com' // Change this to your email recipients
     }
 
     stages {
