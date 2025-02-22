@@ -1,26 +1,44 @@
 pipeline {
-    agent any 
+    agent any
+
+    environment {
+        RECIPIENTS = 'elvdevops@gmail.com' // Change this to your email recipients
+    }
 
     stages {
-        stage('Build') {
+        stage('Build') { 
+            steps { 
+                script { 
+                    echo 'Building...'
+                }
+            }
+        }
+
+        stage('Test') {
             steps {
-                echo 'Building the project...'
-                // Add your build commands here, e.g.,
-                // sh 'mvn clean package' or sh './build.sh'
+                script {
+                    echo 'Running Tests...'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    echo 'Deploying...'
+                }
             }
         }
     }
 
-    post { 
-        success {
-            emailext subject: "Jenkins Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                     body: "Good news! The build was successful.\nCheck details at: ${env.BUILD_URL}",
-                     to: 'elvdevops@gmail.com'
-        }
-        failure {
-            emailext subject: "Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                     body: "Oops! The build failed.\nCheck details at: ${env.BUILD_URL}",
-                     to: 'elvdevops@gmail.com'
+    post {
+        always {
+            script {
+                def status = currentBuild.result ?: 'SUCCESS'
+                emailext subject: "${status}: Build ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                         body: "The build status is ${status}.\nCheck console output at ${env.BUILD_URL}.",
+                         to: "${RECIPIENTS}"
+            }
         }
     }
 }
